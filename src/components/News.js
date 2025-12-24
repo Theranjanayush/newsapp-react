@@ -21,9 +21,11 @@ export class News extends Component {
             articles : [],
             loading: false,
             page: 1,
-            totalResults: 0
+            totalResults: 0,
+            publishedAt: ''
         }
     }
+    
     async componentDidMount() {
         const apiKey = process.env.REACT_APP_NEWS_API_KEY;
         let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${apiKey}&page=1&pageSize=${this.props.pageSize}`;
@@ -74,13 +76,13 @@ export class News extends Component {
     render() {
         return (
             <div className='container my-3'>
-                <h1 className="text-center">Top Headlines</h1>
+                <h1 className="text-center" style={{margin:'35px 0px'}}>Top Headlines</h1>
                 {this.state.loading && <Spinner />}
 
-                <div className='row my-5'>
+                <div className='row '>
                     {!this.state.loading && this.state.articles.map((element) => {
                         return <div className='col-md-4' key={element.url}>
-                            <NewsItem title={element.title ? element.title.slice(0, 40) + ".." : ""} description={element.description ? element.description.slice(0, 100) + ".." : ""} imageUrl={!element.urlToImage ? "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/CM4GX7WJ3Q43CYIKPVFMXPHYRI_size-normalized.jpg&w=1440" : element.urlToImage} newsUrl={element.url} />
+                            <NewsItem title={element.title ? element.title.slice(0, 40) + ".." : ""} description={element.description ? element.description.slice(0, 100) + ".." : ""} imageUrl={!element.urlToImage ? "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/CM4GX7WJ3Q43CYIKPVFMXPHYRI_size-normalized.jpg&w=1440" : element.urlToImage} newsUrl={element.url} author={element.author} date ={element.publishedAt} source ={element.source.name}/>
                         </div>
                     })}
                 </div>
