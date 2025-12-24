@@ -1,22 +1,32 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './spinner'
+import PropTypes from 'prop-types'
+
 export class News extends Component {
-    articles = []
+    static defaultProps = {
+        country : "us",
+        pageSize : 8,
+        category : "general"
+
+    }
+    static propTypes = {
+        country : PropTypes.string,
+        pageSize : PropTypes.number,
+        category : PropTypes.string
+    }
     constructor() {
         super();
         this.state = {
-            articles: this.articles,
+            articles : [],
             loading: false,
             page: 1,
             totalResults: 0
-
-
         }
     }
     async componentDidMount() {
         const apiKey = process.env.REACT_APP_NEWS_API_KEY;
-        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}&page=1&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${apiKey}&page=1&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         console.log(parsedData)
@@ -32,7 +42,7 @@ export class News extends Component {
     handleNextClick = async () => {
         this.setState({ loading: true });
         console.log("next")
-        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.REACT_APP_NEWS_API_KEY}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
         let data = await fetch(url);
         let parsedData = await data.json();
         console.log(parsedData)
@@ -48,7 +58,7 @@ export class News extends Component {
     handlePrevClick = async () => {
 
         this.setState({ loading: true });
-        let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.REACT_APP_NEWS_API_KEY}&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
         let data = await fetch(url);
         let parsedData = await data.json();
         console.log(parsedData)
